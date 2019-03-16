@@ -1,14 +1,15 @@
 
 class Player {
-  constructor({pos, vel, length, color, ctx, canvas}) {
+  constructor({length, ctx, canvas, map}) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.x = pos[0];
-    this.y = pos[1];
-    this.dx = vel[0];
-    this.dy = vel[1];
+    this.x = 50;
+    this.y = 50;
+    this.dx = 10;
+    this.dy = 10;
     this.length = length;
-    this.color = color;
+    this.color = "yellow";
+    this.map = map;
     this.draw();
   }
 
@@ -22,6 +23,9 @@ class Player {
   move(e) {
     this.ctx.clearRect(this.x, this.y, this.length, this.length);
 
+    // if (e.keyCode==39 && !this.map.collision) {
+    //   this.x += this.dx;
+    // }
     if (e.keyCode==39) this.x += this.dx;
     if (e.keyCode==37) this.x -= this.dx;
     if (e.keyCode==40) this.y += this.dy;

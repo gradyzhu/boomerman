@@ -5,25 +5,21 @@ class Game {
   constructor({ctx, canvas}) {
     this.ctx = ctx;
     this.canvas = canvas;
+    this.map = new Map({canvas: canvas, ctx: this.ctx});
     this.start();
   }
 
   start() {
     let player = new Player({ 
-      pos: [50, 50], 
-      vel: [10, 10], 
-      length: 50, 
-      color: "blue", 
+      length: 50,  
       canvas: canvas,
       ctx: this.ctx, 
+      map: this.map
     });
 
     document.addEventListener('keydown', function(e) {
       player.move(e);
     });
-
-    let map = new Map({canvas: canvas, ctx: this.ctx});
-    // let obs = new Obstacle({canvas: canvas, ctx: this.ctx});
   }
 }
 

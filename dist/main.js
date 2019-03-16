@@ -86,6 +86,17 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/crate.js":
+/*!**********************!*\
+  !*** ./src/crate.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("class Crate {\n  constructor(map, ctx) {\n    this.map = map;\n    this.ctx = ctx;\n    this.drawAll();\n  }\n\n  draw(pos) {\n    this.ctx.beginPath();\n    this.ctx.fillStyle = \"#9f6343\";\n    this.ctx.fillRect(pos[0], pos[1], 50, 50);\n    this.ctx.stroke();\n  }  \n\n  drawAll() {\n    let rowValues = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450];\n    let colValues = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650]; \n\n    let crateCount = 0;\n    while (crateCount < 25) {\n      let row = Math.floor(Math.random() * rowValues.length);\n      let col = Math.floor(Math.random() * colValues.length);\n      if (this.map[row][col] == 0) {\n        this.draw([colValues[col], rowValues[row]]);\n        this.map[row][col] = 2;\n        crateCount++;\n      }\n    }\n  }\n}\n\nmodule.exports = Crate;\n\n//# sourceURL=webpack:///./src/crate.js?");
+
+/***/ }),
+
 /***/ "./src/game.js":
 /*!*********************!*\
   !*** ./src/game.js ***!
@@ -93,7 +104,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Player = __webpack_require__(/*! ./player.js */ \"./src/player.js\");\nconst Map = __webpack_require__(/*! ./map.js */ \"./src/map.js\");\n\nclass Game {\n  constructor({ctx, canvas}) {\n    this.ctx = ctx;\n    this.canvas = canvas;\n    this.start();\n  }\n\n  start() {\n    let player = new Player({ \n      pos: [50, 50], \n      vel: [10, 10], \n      length: 50, \n      color: \"blue\", \n      canvas: canvas,\n      ctx: this.ctx, \n    });\n\n    document.addEventListener('keydown', function(e) {\n      player.move(e);\n    });\n\n    let map = new Map({canvas: canvas, ctx: this.ctx});\n    // let obs = new Obstacle({canvas: canvas, ctx: this.ctx});\n  }\n}\n\nmodule.exports = Game;\n\n//# sourceURL=webpack:///./src/game.js?");
+eval("const Player = __webpack_require__(/*! ./player.js */ \"./src/player.js\");\nconst Map = __webpack_require__(/*! ./map.js */ \"./src/map.js\");\n\nclass Game {\n  constructor({ctx, canvas}) {\n    this.ctx = ctx;\n    this.canvas = canvas;\n    this.map = new Map({canvas: canvas, ctx: this.ctx});\n    this.start();\n  }\n\n  start() {\n    let player = new Player({ \n      length: 50,  \n      canvas: canvas,\n      ctx: this.ctx, \n      map: this.map\n    });\n\n    document.addEventListener('keydown', function(e) {\n      player.move(e);\n    });\n  }\n}\n\nmodule.exports = Game;\n\n//# sourceURL=webpack:///./src/game.js?");
 
 /***/ }),
 
@@ -113,9 +124,20 @@ eval("const Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\n\nd
   !*** ./src/map.js ***!
   \********************/
 /*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const Obstacle = __webpack_require__(/*! ./obstacle.js */ \"./src/obstacle.js\");\nconst Crate = __webpack_require__(/*! ./crate.js */ \"./src/crate.js\");\n\nclass Map {\n  constructor({canvas, ctx}) {\n    this.map = [\n      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]\n    ];\n    this.ctx = ctx;\n    this.canvas = canvas;\n    this.collision = true;\n    \n    new Obstacle(this.map, this.ctx);\n    new Crate(this.map, this.ctx);\n  }\n\n}\n\nmodule.exports = Map;\n\n\n\n//# sourceURL=webpack:///./src/map.js?");
+
+/***/ }),
+
+/***/ "./src/obstacle.js":
+/*!*************************!*\
+  !*** ./src/obstacle.js ***!
+  \*************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\nclass Map {\n  constructor({canvas, ctx}) {\n    this.ctx = ctx;\n    this.canvas = canvas;\n    this.map = [\n      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],\n      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],\n      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]\n    ];\n    this.drawObstacles();\n  }\n\n  draw(pos) {\n    this.ctx.beginPath();\n    this.ctx.fillStyle = \"gray\";\n    this.ctx.fillRect(pos[0], pos[1], 50, 50);\n    this.ctx.stroke();\n  }  \n\n  drawObstacles() {\n    for (let i = 0; i < this.map.length; i++) {\n      for (let j = 0; j < this.map[0].length; j++) {\n        if (this.map[i][j] != 0) {\n          this.draw([j * 50, i * 50]);\n        }\n      }\n    }\n  }\n}\n\nmodule.exports = Map;\n\n\n\n//# sourceURL=webpack:///./src/map.js?");
+eval("class Obstacle {\n  constructor(map, ctx) {\n    this.map = map;\n    this.ctx = ctx;\n    this.drawObstacles();\n  }\n\n  drawObstacle(pos) {\n    this.ctx.beginPath();\n    this.ctx.fillStyle = \"#848685\";\n    this.ctx.fillRect(pos[0], pos[1], 50, 50);\n    this.ctx.stroke();\n  }  \n\n  drawObstacles() {\n    for (let i = 0; i < this.map.length; i++) {\n      for (let j = 0; j < this.map[0].length; j++) {\n        if (this.map[i][j] != 0) {\n          this.drawObstacle([j * 50, i * 50]);\n        }\n      }\n    }\n  }\n}\n\nmodule.exports = Obstacle;\n\n//# sourceURL=webpack:///./src/obstacle.js?");
 
 /***/ }),
 
@@ -126,7 +148,7 @@ eval("\nclass Map {\n  constructor({canvas, ctx}) {\n    this.ctx = ctx;\n    th
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\nclass Player {\n  constructor({pos, vel, length, color, ctx, canvas}) {\n    this.canvas = canvas;\n    this.ctx = ctx;\n    this.x = pos[0];\n    this.y = pos[1];\n    this.dx = vel[0];\n    this.dy = vel[1];\n    this.length = length;\n    this.color = color;\n    this.draw();\n  }\n\n  draw() {\n    this.ctx.beginPath();\n    this.ctx.fillStyle = this.color;\n    this.ctx.fillRect(this.x, this.y, this.length, this.length);\n    this.ctx.stroke();\n  }\n\n  move(e) {\n    this.ctx.clearRect(this.x, this.y, this.length, this.length);\n\n    if (e.keyCode==39) this.x += this.dx;\n    if (e.keyCode==37) this.x -= this.dx;\n    if (e.keyCode==40) this.y += this.dy;\n    if (e.keyCode==38) this.y -= this.dy;\n    \n    this.draw();\n    // if (this.x < 0) this.x += this.dx;\n    // if (this.x > canvas.width - this.length) {\n    //   this.x -= this.dx;\n    // }\n    // if (this.y < 0) this.y = this.y + this.dy;\n    // if (this.y > canvas.height - this.length) {\n    //   this.y -= this.dy;\n    // }\n  }\n\n  // drop() {\n  //   bomb = newBomb();\n  // }\n}\n\nmodule.exports = Player;\n\n\n\n\n//# sourceURL=webpack:///./src/player.js?");
+eval("\nclass Player {\n  constructor({length, ctx, canvas, map}) {\n    this.canvas = canvas;\n    this.ctx = ctx;\n    this.x = 50;\n    this.y = 50;\n    this.dx = 10;\n    this.dy = 10;\n    this.length = length;\n    this.color = \"yellow\";\n    this.map = map;\n    this.draw();\n  }\n\n  draw() {\n    this.ctx.beginPath();\n    this.ctx.fillStyle = this.color;\n    this.ctx.fillRect(this.x, this.y, this.length, this.length);\n    this.ctx.stroke();\n  }\n\n  move(e) {\n    this.ctx.clearRect(this.x, this.y, this.length, this.length);\n\n    // if (e.keyCode==39 && !this.map.collision) {\n    //   this.x += this.dx;\n    // }\n    if (e.keyCode==39) this.x += this.dx;\n    if (e.keyCode==37) this.x -= this.dx;\n    if (e.keyCode==40) this.y += this.dy;\n    if (e.keyCode==38) this.y -= this.dy;\n    \n    this.draw();\n    // if (this.x < 0) this.x += this.dx;\n    // if (this.x > canvas.width - this.length) {\n    //   this.x -= this.dx;\n    // }\n    // if (this.y < 0) this.y = this.y + this.dy;\n    // if (this.y > canvas.height - this.length) {\n    //   this.y -= this.dy;\n    // }\n  }\n\n  // drop() {\n  //   bomb = newBomb();\n  // }\n}\n\nmodule.exports = Player;\n\n\n\n\n//# sourceURL=webpack:///./src/player.js?");
 
 /***/ })
 
