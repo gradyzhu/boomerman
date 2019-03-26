@@ -1,4 +1,5 @@
 const Player = require("./player.js");
+const AIPlayer = require("./ai_player.js");
 const Map = require("./map.js");
 
 class Game {
@@ -11,7 +12,7 @@ class Game {
 
   start() {
     let player = new Player({ 
-      length: 50,  
+      height: 50,  
       canvas: canvas,
       ctx: this.ctx, 
       map: this.map
@@ -21,6 +22,8 @@ class Game {
       player.move(e);
     });
   }
+
+  
 }
 
 module.exports = Game;
